@@ -5,6 +5,9 @@
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
+  "scripts": {
+    "test": "mocha --require should test/"
+  },
   "homepage": "https://github.com/eush77/html-redirect",
   "repository": {
     "type": "git",
@@ -24,5 +27,12 @@
     "escape-html": "^1.0.1",
     "trumpet": "^1.7.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "escape-string-regexp": "^1.0.2",
+    "html-select": "^2.3.18",
+    "html-tokenize": "^1.2.0",
+    "mocha": "^1.21.4",
+    "should": "^4.0.4",
+    "stream-to-array": "^2.0.2"
+  }
 }

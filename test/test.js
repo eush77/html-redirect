@@ -50,7 +50,8 @@ describe('Core', function () {
 
 describe('Options', function () {
   it('should set the custom page title', function (done) {
-    var customTitle = 'My Fancy Title';
+    var customTitle = 'My Fancy <Title>'
+      , encodedCustomTitle = 'My Fancy &lt;Title&gt;';
 
     redirect(sampleUrl, {
       title: customTitle
@@ -60,14 +61,15 @@ describe('Options', function () {
           if (err) throw err;
 
           var title = elems[1][1].toString();
-          title.should.equal(customTitle);
+          title.should.equal(encodedCustomTitle);
           done();
         });
       }));
   });
 
   it('should use the custom placeholder in <a>', function (done) {
-    var customPlaceholder = 'click';
+    var customPlaceholder = 'c<li>ck'
+      , encodedCustomPlaceholder = 'c&lt;li&gt;ck';
 
     redirect(sampleUrl, {
       placeholder: customPlaceholder
@@ -77,7 +79,7 @@ describe('Options', function () {
           if (err) throw err;
 
           var placeholder = elems[1][1].toString();
-          placeholder.should.equal(customPlaceholder);
+          placeholder.should.equal(encodedCustomPlaceholder);
           done();
         });
       }));

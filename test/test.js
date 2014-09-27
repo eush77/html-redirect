@@ -84,4 +84,26 @@ describe('Options', function () {
         });
       }));
   });
+
+  it('should replace the whole <body> with the placeholder', function (done) {
+    var customBody = '<span class="main">If redirection did not occur, click '
+                     + '<a href="http://example.com/">this link</a></span>';
+
+    redirect(sampleUrl, {
+      placeholder: customBody,
+      replaceBody: true
+    }).pipe(tokenize())
+      .pipe(select('body', function (elem) {
+        streamToArray(elem.createReadStream(), function (err, elems) {
+          if (err) throw err;
+
+          var body = elems.slice(1, -1).map(function (row) {
+            return row[1];
+          }).join('');
+
+          body.should.equal(customBody);
+          done();
+        });
+      }));
+  });
 });

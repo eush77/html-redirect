@@ -46,3 +46,40 @@ describe('Core', function () {
                        }));
   });
 });
+
+
+describe('Options', function () {
+  it('should set the custom page title', function (done) {
+    var customTitle = 'My Fancy Title';
+
+    redirect(sampleUrl, {
+      title: customTitle
+    }).pipe(tokenize())
+      .pipe(select('head > title', function (elem) {
+        streamToArray(elem.createReadStream(), function (err, elems) {
+          if (err) throw err;
+
+          var title = elems[1][1].toString();
+          title.should.equal(customTitle);
+          done();
+        });
+      }));
+  });
+
+  it('should use the custom placeholder in <a>', function (done) {
+    var customPlaceholder = 'click';
+
+    redirect(sampleUrl, {
+      placeholder: customPlaceholder
+    }).pipe(tokenize())
+      .pipe(select('body a', function (elem) {
+        streamToArray(elem.createReadStream(), function (err, elems) {
+          if (err) throw err;
+
+          var placeholder = elems[1][1].toString();
+          placeholder.should.equal(customPlaceholder);
+          done();
+        });
+      }));
+  });
+});

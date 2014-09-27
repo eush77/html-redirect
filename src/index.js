@@ -31,7 +31,7 @@ module.exports = function (href, options) {
   }
 
   tr.select('meta[http-equiv="refresh"]')
-    .setAttribute('content', '1;' + href);
+    .setAttribute('content', '1;url=' + href);
 
   tr.select('head > script')
     .createWriteStream()

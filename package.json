@@ -1,6 +1,6 @@
 {
   "name": "html-redirect",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Generate HTML redirection page",
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",

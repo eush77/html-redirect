@@ -8,12 +8,11 @@ var tokenize = require('html-tokenize')
   , escapeStringRegexp = require('escape-string-regexp');
 
 
-var sampleUrl = 'http://example.com/';
+var sampleUrl = 'http://example.com/'
+  , sampleUrlRegexp = escapeStringRegexp(sampleUrl);
 
 
 describe('Core', function () {
-  var sampleUrlRegexp = escapeStringRegexp(sampleUrl);
-
   it('should construct a proper meta tag', function (done) {
     redirect(sampleUrl).pipe(tokenize())
                        .pipe(select('head > meta', function (elem) {
@@ -49,6 +48,19 @@ describe('Core', function () {
 
 
 describe('Options', function () {
+  it('should set the specified refresh timeout', function (done) {
+    var customTimeout = 77;
+
+    redirect(sampleUrl, {
+      timeout: customTimeout
+    }).pipe(tokenize())
+      .pipe(select('head > meta', function (elem) {
+        elem.getAttribute('content')
+            .should.match(RegExp('^' + customTimeout + ';url=' + sampleUrlRegexp + '$'));
+        done();
+      }));
+  });
+
   it('should set the custom page title', function (done) {
     var customTitle = 'My Fancy <Title>'
       , encodedCustomTitle = 'My Fancy &lt;Title&gt;';

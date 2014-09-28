@@ -12,6 +12,7 @@ var fs = require('fs')
  *
  * @arg {string} href
  * @arg {Object} options
+ * @property {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
  * @property {string} [title] - Value of the <title>.
  * @property {string} [placeholder] - Text under <a> in the page body.
  * @property {boolean} [replaceBody=false] - Whether placeholder contains the whole <body> in HTML.
@@ -19,6 +20,9 @@ var fs = require('fs')
  */
 module.exports = function (href, options) {
   options = options || {};
+  if (options.timeout == null) {
+    options.timeout = 1;
+  }
 
   // Normalize and escape URL.
   href = url.parse(href).format();
@@ -32,7 +36,7 @@ module.exports = function (href, options) {
   }
 
   tr.select('meta[http-equiv="refresh"]')
-    .setAttribute('content', '1;url=' + href);
+    .setAttribute('content', options.timeout + ';url=' + href);
 
   tr.select('head > script')
     .createWriteStream()

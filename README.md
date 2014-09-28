@@ -1,5 +1,7 @@
 # html-redirect [![Build Status][travis-badge]][travis] [![Dependency Status][david-badge]][david] [![DevDependency Status][david-dev-badge]][david-dev]
 
+[![npm](https://nodei.co/npm/html-redirect.png)](https://nodei.co/npm/html-redirect/)
+
 [travis-badge]: https://travis-ci.org/eush77/html-redirect.svg
 [travis]: https://travis-ci.org/eush77/html-redirect
 [david-badge]: https://david-dm.org/eush77/html-redirect.png
@@ -93,6 +95,12 @@ The return value is a [readable stream](http://nodejs.org/api/stream.html#stream
 `options.title` is the value of `<title>`.
 
 `options.placeholder` is either the text under default `<a>` or the whole `<body>` in HTML depending on `options.replaceBody`.
+
+## Install
+
+```shell
+npm install html-redirect
+```
 
 ## License
 

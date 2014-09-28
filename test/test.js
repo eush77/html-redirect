@@ -31,8 +31,8 @@ describe('Core', function () {
                            if (err) throw err;
 
                            var script = elems[1][1].toString();
-                           script.should.match(RegExp('^window.location\\s*=\\s*"'
-                                                     + sampleUrlRegexp + '";$'));
+                           var expected = 'window.location.replace("' + sampleUrl + '");';
+                           script.should.match(RegExp('^' + escapeStringRegexp(expected) + '$'));
                            done();
                          });
                        }));

@@ -36,7 +36,7 @@ module.exports = function (href, options) {
 
   tr.select('head > script')
     .createWriteStream()
-    .end('window.location = "' + href + '";');
+    .end('window.location.replace("' + href + '");');
 
   if (options.replaceBody) {
     tr.select('body')

@@ -86,7 +86,7 @@ The return value is a [readable stream](http://nodejs.org/api/stream.html#stream
 | timeout     | number  | No        | `1`     |
 | title       | string  | No        |         |
 | placeholder | string  | No        |         |
-| replaceBody | boolean | No        |         |
+| replaceBody | boolean | No        | `false` |
 
 `options.timeout` is probably not what you think it is! It is used *only* in meta-tag redirection. Most of the time JS redirection fires instantaneously regardless of the value of this option.
 

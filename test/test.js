@@ -5,11 +5,12 @@ var redirect = require('..');
 var tokenize = require('html-tokenize')
   , select = require('html-select')
   , streamToArray = require('stream-to-array')
-  , escapeStringRegexp = require('escape-string-regexp');
+  , regexFormat = require('regex-format');
 
 
-var sampleUrl = 'http://example.com/'
-  , sampleUrlRegexp = escapeStringRegexp(sampleUrl);
+RegExp.prototype.format = regexFormat;
+
+var sampleUrl = 'http://example.com/';
 
 
 describe('Core', function () {
@@ -18,7 +19,7 @@ describe('Core', function () {
                        .pipe(select('head > meta', function (elem) {
                          elem.getAttribute('http-equiv').should.equal('refresh');
                          elem.getAttribute('content')
-                             .should.match(RegExp('^\\d+;url=' + sampleUrlRegexp + '$'));
+                             .should.match(/^\d+;url={}$/.format(sampleUrl));
                          done();
                        }));
   });
@@ -30,8 +31,7 @@ describe('Core', function () {
                            if (err) throw err;
 
                            var script = elems[1][1].toString();
-                           var expected = 'window.location.replace("' + sampleUrl + '");';
-                           script.should.match(RegExp('^' + escapeStringRegexp(expected) + '$'));
+                           script.should.match(/^{}$/.format('window.location.replace("' + sampleUrl + '");'));
                            done();
                          });
                        }));
@@ -56,7 +56,7 @@ describe('Options', function () {
     }).pipe(tokenize())
       .pipe(select('head > meta', function (elem) {
         elem.getAttribute('content')
-            .should.match(RegExp('^' + customTimeout + ';url=' + sampleUrlRegexp + '$'));
+            .should.match(/^{};url={}$/.format(customTimeout, sampleUrl));
         done();
       }));
   });

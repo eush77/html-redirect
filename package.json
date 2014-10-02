@@ -28,10 +28,10 @@
     "trumpet": "^1.7.0"
   },
   "devDependencies": {
-    "escape-string-regexp": "^1.0.2",
     "html-select": "^2.3.18",
     "html-tokenize": "^1.2.0",
     "mocha": "^1.21.4",
+    "regex-format": "^0.1.0",
     "should": "^4.0.4",
     "stream-to-array": "^2.0.2"
   }

@@ -2,7 +2,8 @@
 
 var trumpet = require('trumpet')
   , escapeHtml = require('escape-html')
-  , duplexer = require('duplexer2');
+  , duplexer = require('duplexer2')
+  , dent = require('dent');
 
 var fs = require('fs')
   , url = require('url');
@@ -113,12 +114,12 @@ var htmlRedirect = function (href, options) {
 htmlRedirect.createStream = function (href, options) {
   options = options || {};
 
-  var pair = createRedirectionStream(href, options.timeout);
-  var readable = pair.stream, tr = pair.trumpet;
+  dent(createRedirectionStream(href, options.timeout));
 
-  setTitle(tr, options.title);
-  var writable = tr.select('body').createWriteStream();
+  setTitle(dent.o.trumpet, options.title);
 
+  var writable = dent.o.trumpet.select('body').createWriteStream();
+  var readable = dent.o.stream;
   return duplexer(writable, readable);
 };
 

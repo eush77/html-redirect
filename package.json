@@ -26,6 +26,7 @@
     "http-equiv"
   ],
   "dependencies": {
+    "dent": "^0.2.0",
     "duplexer2": "0.0.2",
     "escape-html": "^1.0.1",
     "trumpet": "^1.7.0"

@@ -8,7 +8,55 @@ var fs = require('fs')
 
 
 /**
- * Generate HTML redirection page.
+ * Add redirection <meta> and <script> to the basic HTML page.
+ *
+ * @arg {string} href
+ * @arg {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
+ * @arg {function(tr)} [transform] - Function transforming the Trumpet instance
+ *                                   before it is applied to the template page.
+ * @return {stream.Readable}
+ */
+var createRedirectionStream = function (href, timeout, transform) {
+  if (timeout == null) {
+    timeout = 1;
+  }
+
+  // Normalize and escape URL.
+  href = url.parse(href).format();
+
+  var tr = trumpet();
+
+  tr.select('meta[http-equiv="refresh"]')
+    .setAttribute('content', timeout + ';url=' + href);
+
+  tr.select('head > script')
+    .createWriteStream()
+    .end('window.location.replace("' + href + '");');
+
+  transform(tr);
+
+  return fs.createReadStream(__dirname + '/template.html')
+           .pipe(tr);
+};
+
+
+/**
+ * Trumpet transform that sets the page <title>.
+ *
+ * @arg {Trumpet} tr
+ * @arg {string} [title]
+ */
+var setTitle = function (tr, title) {
+  if (title != null) {
+    tr.select('title')
+      .createWriteStream()
+      .end(escapeHtml(title));
+  }
+};
+
+
+/**
+ * Generate HTML redirection page, with configurable <title> and <body>.
  *
  * @arg {string} href
  * @arg {Object} [options]
@@ -20,43 +68,23 @@ var fs = require('fs')
  */
 module.exports = function (href, options) {
   options = options || {};
-  if (options.timeout == null) {
-    options.timeout = 1;
-  }
 
-  // Normalize and escape URL.
-  href = url.parse(href).format();
+  return createRedirectionStream(href, options.timeout, function (tr) {
+    setTitle(tr, options.title);
 
-  var tr = trumpet();
-
-  if (options.title != null) {
-    tr.select('title')
-      .createWriteStream()
-      .end(escapeHtml(options.title));
-  }
-
-  tr.select('meta[http-equiv="refresh"]')
-    .setAttribute('content', options.timeout + ';url=' + href);
-
-  tr.select('head > script')
-    .createWriteStream()
-    .end('window.location.replace("' + href + '");');
-
-  if (options.replaceBody) {
-    tr.select('body')
-      .createWriteStream()
-      .end(options.placeholder);
-  }
-  else {
-    var link = tr.select('body a');
-    link.setAttribute('href', href);
-
-    if (options.placeholder != null) {
-      link.createWriteStream()
-          .end(escapeHtml(options.placeholder));
+    if (options.replaceBody) {
+      tr.select('body')
+        .createWriteStream()
+        .end(options.placeholder);
     }
-  }
+    else {
+      var link = tr.select('body a');
+      link.setAttribute('href', href);
 
-  return fs.createReadStream(__dirname + '/template.html')
-           .pipe(tr);
+      if (options.placeholder != null) {
+        link.createWriteStream()
+            .end(escapeHtml(options.placeholder));
+      }
+    }
+  });
 };

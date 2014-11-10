@@ -11,7 +11,7 @@ var fs = require('fs')
  * Generate HTML redirection page.
  *
  * @arg {string} href
- * @arg {Object} options
+ * @arg {Object} [options]
  * @property {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
  * @property {string} [title] - Value of the <title>.
  * @property {string} [placeholder] - Text under <a> in the page body.

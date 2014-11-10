@@ -1,7 +1,8 @@
 'use strict';
 
 var trumpet = require('trumpet')
-  , escapeHtml = require('escape-html');
+  , escapeHtml = require('escape-html')
+  , duplexer = require('duplexer2');
 
 var fs = require('fs')
   , url = require('url');
@@ -14,7 +15,9 @@ var fs = require('fs')
  * @arg {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
  * @arg {function(tr)} [transform] - Function transforming the Trumpet instance
  *                                   before it is applied to the template page.
- * @return {stream.Readable}
+ * @return {stream.Readable | {stream: stream.Readable, trumpet: Trumpet}}
+ *   If `transform` argument not set, return both stream and trumpet.
+ *   Otherwise, just the stream.
  */
 var createRedirectionStream = function (href, timeout, transform) {
   if (timeout == null) {
@@ -33,10 +36,17 @@ var createRedirectionStream = function (href, timeout, transform) {
     .createWriteStream()
     .end('window.location.replace("' + href + '");');
 
-  transform(tr);
+  if (transform) {
+    transform(tr);
+  }
 
-  return fs.createReadStream(__dirname + '/template.html')
-           .pipe(tr);
+  var stream = fs.createReadStream(__dirname + '/template.html')
+                 .pipe(tr);
+
+  return transform ? stream : {
+    stream: stream,
+    trumpet: tr
+  };
 };
 
 
@@ -66,7 +76,7 @@ var setTitle = function (tr, title) {
  * @property {boolean} [replaceBody=false] - Whether placeholder contains the whole <body> in HTML.
  * @return {stream.Readable}
  */
-module.exports = function (href, options) {
+var htmlRedirect = function (href, options) {
   options = options || {};
 
   return createRedirectionStream(href, options.timeout, function (tr) {
@@ -88,3 +98,29 @@ module.exports = function (href, options) {
     }
   });
 };
+
+
+/**
+ * Generate HTML redirection page and return a transform stream.
+ * Writing to it fills up the <body>, reading results in the final compiled page.
+ *
+ * @arg {string} href
+ * @arg {Object} [options]
+ * @property {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
+ * @property {string} [title] - Value of the <title>.
+ * @return {stream.Transform}
+ */
+htmlRedirect.createStream = function (href, options) {
+  options = options || {};
+
+  var pair = createRedirectionStream(href, options.timeout);
+  var readable = pair.stream, tr = pair.trumpet;
+
+  setTitle(tr, options.title);
+  var writable = tr.select('body').createWriteStream();
+
+  return duplexer(writable, readable);
+};
+
+
+module.exports = htmlRedirect;

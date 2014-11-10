@@ -15,7 +15,7 @@ var fs = require('fs')
  * @arg {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
  * @arg {function(tr)} [transform] - Function transforming the Trumpet instance
  *                                   before it is applied to the template page.
- * @return {stream.Readable | {stream: stream.Readable, trumpet: Trumpet}}
+ * @return {Readable | {stream: Readable, trumpet: Trumpet}}
  *   If `transform` argument not set, return both stream and trumpet.
  *   Otherwise, just the stream.
  */
@@ -74,7 +74,7 @@ var setTitle = function (tr, title) {
  * @property {string} [title] - Value of the <title>.
  * @property {string} [placeholder] - Text under <a> in the page body.
  * @property {boolean} [replaceBody=false] - Whether placeholder contains the whole <body> in HTML.
- * @return {stream.Readable}
+ * @return {Readable}
  */
 var htmlRedirect = function (href, options) {
   options = options || {};
@@ -108,7 +108,7 @@ var htmlRedirect = function (href, options) {
  * @arg {Object} [options]
  * @property {number} [timeout=1] - Http-equiv refresh timeout (in seconds).
  * @property {string} [title] - Value of the <title>.
- * @return {stream.Transform}
+ * @return {Transform}
  */
 htmlRedirect.createStream = function (href, options) {
   options = options || {};

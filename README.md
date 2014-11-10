@@ -11,7 +11,7 @@
 
 Generate HTML redirection page.
 
-## Example
+## Examples
 
 As simple as it can be:
 ```js
@@ -75,13 +75,37 @@ example3.html:
 </html>
 ```
 
+You can also use `html-redirect` in the form of a transform stream.
+
+example4.js:
+```js
+process.stdin
+       .pipe(htmlRedirect.createStream('http://example.com/'))
+       .pipe(process.stdout);
+```
+
+Try it in the console:
+```
+printf 'Contents from the <b>stdin</b>.' |node example.js
+```
+
+```
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>(redirect)</title>
+    <meta http-equiv="refresh" content="1;url=http://example.com/">
+    <script>window.location.replace("http://example.com/");</script>
+  </head>
+  <body>Contents from the <b>stdin</b>.</body>
+</html>
+```
+
 ## API
 
 ### htmlRedirect(url, [options])
 
 The return value is a [readable stream](http://nodejs.org/api/stream.html#stream_class_stream_readable), which can be fed to [fs.createWriteStream](http://nodejs.org/api/fs.html#fs_fs_createwritestream_path_options), [process.stdout](http://nodejs.org/api/process.html#process_process_stdout), [concat-stream](https://www.npmjs.org/package/concat-stream), [html-tokenize](https://npmjs.org/package/html-tokenize), or virtually any other writable or transform stream.
-
-### Options
 
 | Option      | Type    | Required? | Default |
 | :---------- | :------ | :-------: | :------ |
@@ -95,6 +119,15 @@ The return value is a [readable stream](http://nodejs.org/api/stream.html#stream
 `options.title` is the value of `<title>`.
 
 `options.placeholder` is either the text under default `<a>` or the whole `<body>` in HTML depending on `options.replaceBody`.
+
+### htmlRedirect.createStream(url, [options])
+
+The return value is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform), which reads the `<body>` from its readable side and outputs the compiled HTML as `htmlRedirect()` does.
+
+| Option      | Type    | Required? | Default |
+| :---------- | :------ | :-------: | :------ |
+| timeout     | number  | No        | `1`     |
+| title       | string  | No        |         |
 
 ## Install
 

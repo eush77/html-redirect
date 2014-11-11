@@ -1,13 +1,13 @@
-# html-redirect [![Build Status][travis-badge]][travis] [![Dependency Status][david-badge]][david] [![DevDependency Status][david-dev-badge]][david-dev]
+# html-redirect [![Build Status][travis-badge]][travis] [![Code Climate][codeclimate-badge]][codeclimate] [![Dependency Status][david-badge]][david]
 
 [![npm](https://nodei.co/npm/html-redirect.png)](https://nodei.co/npm/html-redirect/)
 
-[travis-badge]: https://travis-ci.org/eush77/html-redirect.svg
 [travis]: https://travis-ci.org/eush77/html-redirect
-[david-badge]: https://david-dm.org/eush77/html-redirect.png
+[travis-badge]: https://travis-ci.org/eush77/html-redirect.svg
+[codeclimate]: https://codeclimate.com/github/eush77/html-redirect
+[codeclimate-badge]: https://codeclimate.com/github/eush77/html-redirect/badges/gpa.svg
 [david]: https://david-dm.org/eush77/html-redirect
-[david-dev-badge]: https://david-dm.org/eush77/html-redirect/dev-status.png
-[david-dev]: https://david-dm.org/eush77/html-redirect#info=devDependencies
+[david-badge]: https://david-dm.org/eush77/html-redirect.png
 
 Generate HTML redirection page.
 

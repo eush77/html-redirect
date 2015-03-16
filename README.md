@@ -1,21 +1,21 @@
-# html-redirect [![Build Status][travis-badge]][travis] [![Code Climate][codeclimate-badge]][codeclimate] [![Dependency Status][david-badge]][david]
-
 [![npm](https://nodei.co/npm/html-redirect.png)](https://nodei.co/npm/html-redirect/)
+
+# html-redirect
+
+[![Build Status][travis-badge]][travis] [![Dependency Status][david-badge]][david]
 
 [travis]: https://travis-ci.org/eush77/html-redirect
 [travis-badge]: https://travis-ci.org/eush77/html-redirect.svg
-[codeclimate]: https://codeclimate.com/github/eush77/html-redirect
-[codeclimate-badge]: https://codeclimate.com/github/eush77/html-redirect/badges/gpa.svg
 [david]: https://david-dm.org/eush77/html-redirect
 [david-badge]: https://david-dm.org/eush77/html-redirect.png
 
-Generate HTML redirection page.
+Generate HTML redirection page readable stream.
 
-## Examples
+## Example
 
-As simple as it can be:
 ```js
-htmlRedirect('http://example.com').pipe(fs.createWriteStream('example1.html'));
+htmlRedirect('http://example.com')
+  .pipe(fs.createWriteStream('example1.html'));
 ```
 
 example1.html:
@@ -31,7 +31,38 @@ example1.html:
 </html>
 ```
 
-You can set some options if you want.
+## API
+
+### htmlRedirect(url, [options])
+
+Returns a readable stream of HTML.
+
+| Option      | Type    | Required? | Default |
+| :---------- | :------ | :-------: | :------ |
+| timeout     | number  | No        | `1`     |
+| title       | string  | No        |         |
+| placeholder | string  | No        |         |
+| replaceBody | boolean | No        | `false` |
+
+`options.timeout` is a timeout for meta-tag redirection. JS redirection will fire instantaneously regardless of the value of this option.
+
+`options.title` is the value of `<title>`.
+
+`options.placeholder` is either the text under default `<a>` or the whole `<body>` in HTML depending on `options.replaceBody`.
+
+### htmlRedirect.createStream(url, [options])
+
+Returns a transform stream. Body content -> HTML page.
+
+| Option      | Type    | Required? | Default |
+| :---------- | :------ | :-------: | :------ |
+| timeout     | number  | No        | `1`     |
+| title       | string  | No        |         |
+
+## More examples
+
+### Set some options
+
 ```js
 htmlRedirect('http://example.com', {
   timeout: 0,
@@ -52,6 +83,8 @@ example2.html:
   <body><a href="http://example.com/">Your browser does not support redirection. Please click this link.</a></body>
 </html>
 ```
+
+### Replace body
 
 ```js
 htmlRedirect('http://example.com', {
@@ -75,13 +108,13 @@ example3.html:
 </html>
 ```
 
-You can also use `html-redirect` in the form of a transform stream.
+### Use it as a transform stream
 
 example4.js:
 ```js
 process.stdin
-       .pipe(htmlRedirect.createStream('http://example.com/'))
-       .pipe(process.stdout);
+  .pipe(htmlRedirect.createStream('http://example.com/'))
+  .pipe(process.stdout);
 ```
 
 Try it in the console:
@@ -100,34 +133,6 @@ printf 'Contents from the <b>stdin</b>.' |node example.js
   <body>Contents from the <b>stdin</b>.</body>
 </html>
 ```
-
-## API
-
-### htmlRedirect(url, [options])
-
-The return value is a [readable stream](http://nodejs.org/api/stream.html#stream_class_stream_readable), which can be fed to [fs.createWriteStream](http://nodejs.org/api/fs.html#fs_fs_createwritestream_path_options), [process.stdout](http://nodejs.org/api/process.html#process_process_stdout), [concat-stream](https://www.npmjs.org/package/concat-stream), [html-tokenize](https://npmjs.org/package/html-tokenize), or virtually any other writable or transform stream.
-
-| Option      | Type    | Required? | Default |
-| :---------- | :------ | :-------: | :------ |
-| timeout     | number  | No        | `1`     |
-| title       | string  | No        |         |
-| placeholder | string  | No        |         |
-| replaceBody | boolean | No        | `false` |
-
-`options.timeout` is probably not what you think it is! It is used *only* in meta-tag redirection. Most of the time JS redirection fires instantaneously regardless of the value of this option.
-
-`options.title` is the value of `<title>`.
-
-`options.placeholder` is either the text under default `<a>` or the whole `<body>` in HTML depending on `options.replaceBody`.
-
-### htmlRedirect.createStream(url, [options])
-
-The return value is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform), which reads the `<body>` from its readable side and outputs the compiled HTML as `htmlRedirect()` does.
-
-| Option      | Type    | Required? | Default |
-| :---------- | :------ | :-------: | :------ |
-| timeout     | number  | No        | `1`     |
-| title       | string  | No        |         |
 
 ## Install
 

@@ -11,6 +11,11 @@
   "scripts": {
     "test": "mocha --require should test/"
   },
+  "files": [
+    "src/",
+    "cli.js",
+    "usage.txt"
+  ],
   "homepage": "https://github.com/eush77/html-redirect",
   "repository": {
     "type": "git",

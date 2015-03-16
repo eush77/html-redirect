@@ -5,6 +5,9 @@
   "author": "Eugene Sharygin <eush77@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
+  "bin": {
+    "html-redirect": "cli.js"
+  },
   "scripts": {
     "test": "mocha --require should test/"
   },
@@ -26,9 +29,11 @@
     "http-equiv"
   ],
   "dependencies": {
+    "camelcase-keys": "^1.0.0",
     "dent": "^0.2.0",
     "duplexer2": "0.0.2",
     "escape-html": "^1.0.1",
+    "minimist": "^1.1.1",
     "trumpet": "^1.7.0"
   },
   "devDependencies": {

@@ -1,0 +1,7 @@
+Usage:  html-redirect [OPTION]... URL
+
+Options:
+  --title           Page title
+  --placeholder     Text under <a> in the page body, or the page body itself
+  --replace-body    If true, --placeholder replaces the whole body of a page
+  --timeout         http-equiv refresh timeout

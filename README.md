@@ -9,7 +9,7 @@
 [david]: https://david-dm.org/eush77/html-redirect
 [david-badge]: https://david-dm.org/eush77/html-redirect.png
 
-Generate HTML redirection page readable stream.
+Generate HTML redirection page.
 
 ## Example
 
@@ -52,12 +52,24 @@ Returns a readable stream of HTML.
 
 ### htmlRedirect.createStream(url, [options])
 
-Returns a transform stream. Body content -> HTML page.
+Returns a transform stream. Body content &rarr; HTML page.
 
 | Option      | Type    | Required? | Default |
 | :---------- | :------ | :-------: | :------ |
 | timeout     | number  | No        | `1`     |
 | title       | string  | No        |         |
+
+## CLI
+
+```
+Usage:  html-redirect [OPTION]... URL
+
+Options:
+  --title           Page title
+  --placeholder     Text under <a> in the page body, or the page body itself
+  --replace-body    If true, --placeholder replaces the whole body of a page
+  --timeout         http-equiv refresh timeout
+```
 
 ## More examples
 
